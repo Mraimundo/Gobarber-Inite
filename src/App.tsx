@@ -1,8 +1,15 @@
+import { SignIn } from './pages/SignIn';
+// import { SignUp } from './pages/SignUp';
 import GlobalStyle from "./styles/global";
+
+import { AuthProvider } from './context/AuthContext';
+
 function App() {
   return (
     <>
-      <h1>GoBarber</h1>
+      <AuthProvider>
+        <SignIn />
+      </AuthProvider>
       <GlobalStyle />
     </>
   );
