@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -7,11 +7,21 @@ import { FiArrowLeft, FiMail, FiUser, FiLock } from 'react-icons/fi';
 
 import logoImg from '../../assets/logo.svg';
 
-import getValidationErrors from '../../utils/getValidationErrors'
+import api from '../../services/api';
+import { useToast } from '../../context/ToastContext';
+
+// import getValidationErrors from '../../utils/getValidationErrors';
+
 import { Input } from '../../components/Input';
 import { Button } from '../../components/Button';
 
 import * as S from './styles'
+
+interface SignUpFormData {
+  name: string;
+  email: string;
+  password: string;
+}
 
 interface Errors {
   [key: string]: string;
@@ -19,8 +29,9 @@ interface Errors {
 
 export function SignUp() {
   const formRef = useRef<FormHandles>(null);
-
-  const handleSubmit = useCallback(async (data: object) => {
+  const { addToast } = useToast();
+  const navigate = useNavigate();
+  const handleSubmit = useCallback(async (data: SignUpFormData) => {
     try {
       formRef.current?.setErrors({});
 
@@ -34,6 +45,16 @@ export function SignUp() {
         abortEarly: false,
       });
 
+      await api.post('users', data);
+
+      navigate('/');
+
+      addToast({
+        type: 'success',
+        title: 'Cadastro realizado!',
+        description: 'Você já pode fazer seu logon no GoBarber!'
+      });
+
     } catch (err) {
       const validationErrors: Errors = {};
       // const validationErrors = {};
@@ -43,11 +64,19 @@ export function SignUp() {
           validationErrors[error.path!] = error.message;
         });
         formRef.current?.setErrors(validationErrors);
+
+        return;
       }
+
+      addToast({
+        type: 'error',
+        title: 'Erro no cadastro',
+        description: 'Ocorreu um erro ao fazer cadastro, tente novamente.'
+      });
       // const errors = getValidationErrors(err)
       // formRef.current?.setErrors(errors);
     }
-  }, []);
+  }, [navigate, addToast]);
 
   return (
     <S.Container>

@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
@@ -27,7 +27,7 @@ interface Errors {
 
 export function SignIn() {
   const formRef = useRef<FormHandles>(null);
-
+  const navigate = useNavigate();
   const { user, signIn } = useContext(AuthContext);
   const { addToast } = useToast();
 
@@ -49,6 +49,8 @@ export function SignIn() {
           password: data.password
         });
 
+        navigate('/dashboard');
+
       } catch (err) {
         const validationErrors: Errors = {};
         if (err instanceof Yup.ValidationError) {
@@ -68,7 +70,7 @@ export function SignIn() {
         });
 
       }
-    }, [signIn, addToast]);
+    }, [signIn, addToast, navigate]);
 
   return (
     <S.Container>
