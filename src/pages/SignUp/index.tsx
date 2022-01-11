@@ -1,4 +1,5 @@
 import React, { useCallback, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
@@ -52,38 +53,40 @@ export function SignUp() {
     <S.Container>
       <S.Background />
       <S.Content>
-        <img src={logoImg} alt="GoBarber" />
+        <S.AnimationContainer>
+          <img src={logoImg} alt="GoBarber" />
 
-        <Form ref={formRef} onSubmit={handleSubmit}>
+          <Form ref={formRef} onSubmit={handleSubmit}>
 
-          <h1>Faça seu cadastro</h1>
+            <h1>Faça seu cadastro</h1>
 
-          <Input
-            name="name"
-            icon={FiUser}
-            placeholder='Nome'
-          />
+            <Input
+              name="name"
+              icon={FiUser}
+              placeholder='Nome'
+            />
 
-          <Input
-            name="email"
-            icon={FiMail}
-            placeholder='E-mail'
-          />
+            <Input
+              name="email"
+              icon={FiMail}
+              placeholder='E-mail'
+            />
 
-          <Input
-            name='password'
-            icon={FiLock}
-            type='password'
-            placeholder='Senha'
-          />
+            <Input
+              name='password'
+              icon={FiLock}
+              type='password'
+              placeholder='Senha'
+            />
 
-          <Button type='submit'>Cadastrar</Button>
-        </Form>
+            <Button type='submit'>Cadastrar</Button>
+          </Form>
 
-        <a href="login">
-          <FiArrowLeft />
-          Voltar para logon
-        </a>
+          <Link to="/">
+            <FiArrowLeft />
+            Voltar para logon
+          </Link>
+        </S.AnimationContainer>
       </S.Content>
     </S.Container>
   )
